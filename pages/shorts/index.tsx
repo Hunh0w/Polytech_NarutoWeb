@@ -11,7 +11,7 @@ export default function Characters() {
     const shorts_elements = [];
     for(let i = 0; i < shorts.length; i++){
         shorts_elements.push(
-            <Col sm={4} key={i}>
+            <Col sm={12} xl={5} xxl={4} key={i}>
                 <div className={"short"}>
                     <h2 className={"shortName"}>{shorts[i]}</h2>
                     <Player
@@ -35,7 +35,7 @@ export default function Characters() {
             </Head>
 
             <div id="shorts">
-                <Container>
+                <Container fluid>
                     <Row>
                         {shorts_elements}
                     </Row>
