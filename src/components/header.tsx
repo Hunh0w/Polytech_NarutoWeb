@@ -7,8 +7,16 @@ const navigation = [
         path: "/"
     },
     {
-        name: "Shorts",
-        path: "/shorts"
+        name: "Personnages",
+        path: "/characters"
+    },
+    {
+        name: "Organisations",
+        path: "/organizations"
+    },
+    {
+        name: "Rangs",
+        path: "/ranks"
     }
 ];
 
@@ -28,7 +36,7 @@ export default function Header(props: {}) {
 
     return (<Container fluid id={"header"} style={{"display": "flex", "justifyContent": "space-between"}}>
         <div>
-            <h1>Naruto</h1>
+            <h1 className={"title"}>Naruto</h1>
         </div>
         <div className={"navcontainer"}>
             <nav>
@@ -38,7 +46,7 @@ export default function Header(props: {}) {
             </nav>
         </div>
         <div>
-            <button className={"button-85"}>Se connecter</button>
+            <button className={"button-85"} onClick={(evt) => router.push("/login")}>Se connecter</button>
         </div>
     </Container>)
 }
