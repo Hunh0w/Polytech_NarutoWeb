@@ -4,9 +4,14 @@ import jsSHA from "jssha";
 import Cookies from "js-cookie"
 import {Container} from "react-grid-system";
 import {useState} from "react";
+import {url} from '../../utils/global_vars'
+import {useRouter} from "next/router";
 
 export default function Characters() {
 
+    const router = useRouter();
+
+    const [ title, setTitle ] = useState("Authentification");
     const [ email, setEmail ] = useState("");
     const [ password, setPassword ] = useState("");
 
@@ -26,26 +31,34 @@ export default function Characters() {
             email: email,
             password: hashpass
         });
-        fetch("http://sigsegv:8080/login", {
+        fetch(url+"/login", {
             method: 'post',
             headers: {
               "Content-Type": "application/json"
             },
             body: formdata
         }).then((response) => {
-            console.log(response);
             const token = response.headers.get("Authorization");
-            Cookies.set("token", token);
+            if(response.status == 200 && token != null){
+                Cookies.set("token", token);
+                setTitle("Authentication Success !!");
+                setTimeout((e) => {
+                    router.push("/characters");
+                }, 1500);
+            }else {
+                setTitle("Authentication Failed")
+            }
+
         });
     }
 
     return <>
         <Head>
-            <title>Authentification</title>
+            <title>Authentication</title>
         </Head>
         <Container id={"login"} fluid>
             <Container className={"container"}>
-                <h1>Authentification</h1>
+                <h1>{title}</h1>
                 <Container className={"form"}>
                     <div>
                         <label style={{"color": "white"}}>Email</label>

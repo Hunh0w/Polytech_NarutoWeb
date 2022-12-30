@@ -1,11 +1,10 @@
 import {Container} from "react-grid-system";
 import {useRouter} from "next/router";
+// @ts-ignore
+import Cookies from "js-cookie";
+import {useEffect, useState} from "react";
 
 const navigation = [
-    {
-        name: "Accueil",
-        path: "/"
-    },
     {
         name: "Personnages",
         path: "/characters"
@@ -24,15 +23,26 @@ export default function Header(props: {}) {
 
     const router = useRouter();
 
+    const [ btnProps, setBtnProps ] = useState({title: "Connexion", style: {}, path: "/login"});
+
     const linksElements = [];
     for(let i = 0; i < navigation.length; i++){
         const element = navigation[i];
-        console.log(router.asPath)
-        console.log(element.path)
         linksElements.push(<li key={i} onClick={(evt) => {router.push(element.path)}} className={router.asPath === element.path ? "active":""}>
             <span>{element.name}</span>
         </li>)
     }
+
+    useEffect(() => {
+        const token = Cookies.get("token");
+        if(token != null){
+            const json_str = Buffer.from(token, 'base64').toString('utf8');
+            const json_obj = JSON.parse(json_str);
+            const username: string = json_obj.username;
+            const privileges: number = json_obj.privileges;
+
+        }
+    }, []);
 
     return (<Container fluid id={"header"} style={{"display": "flex", "justifyContent": "space-between"}}>
         <div>
@@ -46,7 +56,9 @@ export default function Header(props: {}) {
             </nav>
         </div>
         <div>
-            <button className={"button-85"} onClick={(evt) => router.push("/login")}>Se connecter</button>
+            <button className={"button-85"} onClick={(evt) => {
+                 if(btnProps.path !== "") router.push(btnProps.path)
+            }} style={btnProps.style}>{btnProps.title}</button>
         </div>
     </Container>)
 }

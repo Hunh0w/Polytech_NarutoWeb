@@ -25,7 +25,7 @@ export default function Characters() {
         .then((jsonObj) => {
             setCharacters(jsonObj.characters);
         })
-    });
+    }, []);
 
 
 
