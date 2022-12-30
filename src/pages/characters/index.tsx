@@ -2,6 +2,7 @@ import Head from "next/head";
 import {useEffect, useState} from "react";
 import { url } from "../../utils/global_vars"
 import {Container} from "react-grid-system";
+import {useRouter} from "next/navigation";
 
 interface Character {
     id: number
@@ -13,6 +14,7 @@ export default function Characters() {
 
     const [ characters, setCharacters ] = useState([]);
 
+    const router = useRouter();
 
     useEffect(() => {
         fetch(url+"/characters", {
@@ -37,8 +39,10 @@ export default function Characters() {
             {characters.map((value: Character, index) => {
                 return (
                     <div className={"character"} key={index}>
-                        <img src={value.image} />
-                        <h1 className={"character_realname"}>{value.realname}</h1>
+                        <div className={"character_card"} onClick={(evt) => router.push("/character/"+value.id)}>
+                            <img src={value.image} />
+                            <h1 className={"character_realname"}>{value.realname}</h1>
+                        </div>
                     </div>
                 )
             })}

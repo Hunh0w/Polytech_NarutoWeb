@@ -2,28 +2,21 @@ import {Container} from "react-grid-system";
 import {useRouter} from "next/router";
 // @ts-ignore
 import Cookies from "js-cookie";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
+import {UserContext} from "../pages/_app";
 
-const navigation = [
+export const navigation = [
     {
         name: "Personnages",
         path: "/characters"
-    },
-    {
-        name: "Organisations",
-        path: "/organizations"
-    },
-    {
-        name: "Rangs",
-        path: "/ranks"
     }
 ];
 
 export default function Header(props: {}) {
 
     const router = useRouter();
-
-    const [ btnProps, setBtnProps ] = useState({title: "Connexion", style: {}, path: "/login"});
+    const { userSession, setUserSession } = useContext(UserContext);
+    const inSession = userSession.username !== null && userSession.username !== ""
 
     const linksElements = [];
     for(let i = 0; i < navigation.length; i++){
@@ -32,17 +25,6 @@ export default function Header(props: {}) {
             <span>{element.name}</span>
         </li>)
     }
-
-    useEffect(() => {
-        const token = Cookies.get("token");
-        if(token != null){
-            const json_str = Buffer.from(token, 'base64').toString('utf8');
-            const json_obj = JSON.parse(json_str);
-            const username: string = json_obj.username;
-            const privileges: number = json_obj.privileges;
-
-        }
-    }, []);
 
     return (<Container fluid id={"header"} style={{"display": "flex", "justifyContent": "space-between"}}>
         <div>
@@ -57,8 +39,12 @@ export default function Header(props: {}) {
         </div>
         <div>
             <button className={"button-85"} onClick={(evt) => {
-                 if(btnProps.path !== "") router.push(btnProps.path)
-            }} style={btnProps.style}>{btnProps.title}</button>
+                 if(!inSession) router.push("/login")
+            }} style={inSession ? userSession.privileges >= 50 ? {"color": "red", "fontWeight": "bold"}:{"color": "blue"}:{}}>{
+                inSession
+                ? userSession.username
+                : "Connexion"
+            }</button>
         </div>
     </Container>)
 }

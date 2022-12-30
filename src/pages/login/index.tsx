@@ -3,9 +3,10 @@ import jsSHA from "jssha";
 // @ts-ignore
 import Cookies from "js-cookie"
 import {Container} from "react-grid-system";
-import {useState} from "react";
+import {useContext, useState} from "react";
 import {url} from '../../utils/global_vars'
 import {useRouter} from "next/router";
+import {UserContext} from "../_app";
 
 export default function Characters() {
 
@@ -14,6 +15,8 @@ export default function Characters() {
     const [ title, setTitle ] = useState("Authentification");
     const [ email, setEmail ] = useState("");
     const [ password, setPassword ] = useState("");
+
+    const { userSession, setUserSession } = useContext(UserContext);
 
     const handleChange = (event: any, setter: any) => {
         setter(event.target.value);
@@ -42,6 +45,14 @@ export default function Characters() {
             if(response.status == 200 && token != null){
                 Cookies.set("token", token);
                 setTitle("Authentication Success !!");
+
+                const json_str = Buffer.from(token, 'base64').toString('utf8');
+                const json_obj = JSON.parse(json_str);
+                const username: string = json_obj.username;
+                const privileges: number = json_obj.privileges;
+
+                setUserSession({username: username, privileges: privileges});
+
                 setTimeout((e) => {
                     router.push("/characters");
                 }, 1500);

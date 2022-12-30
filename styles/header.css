@@ -5,6 +5,7 @@
     align-items: center;
     background: #171717;  /* fallback for old browsers */
     border-bottom: 2px solid #424242;
+    width: 100%;
 }
 
 #header nav > ul {
