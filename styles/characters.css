@@ -11,6 +11,11 @@
     background-color: rgba(0,0,0,0.5);
     text-align: center;
     cursor: pointer;
+    padding-bottom: 15px;
+}
+
+#characters .character .character_card:hover {
+    border: 1px dashed #750000;
 }
 
 #characters .character_realname {

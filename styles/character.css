@@ -1,0 +1,24 @@
+#character {
+    width: 70%;
+    margin-top: 100px;
+    margin-bottom: 100px;
+    padding-block: 20px;
+    border: 2px dashed #7c0000;
+    color: white;
+}
+
+#character .shorts {
+    display: grid;
+    gap: 30px;
+    grid-auto-rows: auto;
+    align-items: center;
+    align-self: center;
+    justify-content: center;
+    justify-self: center;
+}
+
+@media screen and (min-width: 1500px) {
+    #character .shorts {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

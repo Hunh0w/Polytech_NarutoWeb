@@ -4,7 +4,7 @@ import {url} from "./utils/global_vars";
 import {navigation} from "./components/header";
 
 const paths = [
-  "/character/"
+    "/admin"
 ];
 
 function isNavigationContainsPath(path: string){
@@ -12,11 +12,22 @@ function isNavigationContainsPath(path: string){
         if(path.toLowerCase().startsWith(nav))
             return true;
     }
-    for(const nav of navigation){
-        if(path.toLowerCase().startsWith(nav.path))
-            return true;
-    }
     return false;
+}
+
+function base64DecodeUnicode(str: string) {
+    // Convert Base64 encoded bytes to percent-encoding, and then get the original string.
+    const percentEncodedStr = atob(str).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join('');
+    return decodeURIComponent(percentEncodedStr);
+}
+
+function isAdmin(token: string){
+    const json_str = base64DecodeUnicode(token);
+    const json_obj = JSON.parse(json_str);
+    const privileges: number = json_obj.privileges;
+    return privileges >= 100;
 }
 
 export async function middleware(request: NextRequest) {
@@ -27,6 +38,7 @@ export async function middleware(request: NextRequest) {
     }
 
     if(isNavigationContainsPath(request.nextUrl.pathname)){
+        console.log("okey")
         const token = request.cookies.get("token");
         if(token){
             const response = await fetch(url+"/login/check", {
@@ -36,9 +48,17 @@ export async function middleware(request: NextRequest) {
                 }
             });
             console.log(response.status);
-            if(response.status != 200)
-                return NextResponse.redirect(new URL("/login", request.url));
+            if(response.status != 200 || !isAdmin(token.value)){
+                const response = NextResponse.redirect(new URL("/login", request.url));
+                response.cookies.delete("token");
+                return response;
+            }
+        }else {
+            const response = NextResponse.redirect(new URL("/login", request.url));
+            response.cookies.delete("token");
+            return response;
         }
+
     }
 
     return NextResponse.next();

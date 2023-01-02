@@ -1,0 +1,73 @@
+#admin {
+    color: white;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#admin > h1 {
+    text-decoration: underline;
+}
+
+#admin table {
+    background-color: black;
+    border: 2px dashed #6e0000;
+    margin-bottom: 30px;
+    padding: 10px;
+}
+
+#admin .attributes {
+    display: flex;
+    flex-direction: column;
+}
+
+#admin #newcharacter {
+    background-color: black;
+    border: 2px dashed #6e0000;
+    padding-bottom: 30px;
+}
+
+#admin #newcharacter #appearances {
+    border: 2px dashed #6e0000;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+#admin #newcharacter #appearances .appearance {
+    border-block: 4px dashed #4b0000;
+}
+
+#admin #newcharacter #abilities,.images,.short_characters,.short_fights {
+    display: flex;
+    flex-direction: column;
+}
+
+#admin #newcharacter .appearances_title {
+    margin-top: 20px;
+}
+
+#admin #newcharacter .appearance {
+    display: flex;
+    flex-direction: column;
+}
+
+#admin #newcharacter #organizations {
+
+}
+
+#admin .global_actions {
+    margin-bottom: 20px;
+}
+
+#admin button {
+    margin-inline: 3px;
+    background-color: black;
+    color: white;
+    border: 1px dashed #6e0000;
+    cursor: pointer;
+}
+#admin button:hover {
+    border: 2px solid #6e0000;
+}

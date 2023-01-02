@@ -39,7 +39,8 @@ export default function Header(props: {}) {
         </div>
         <div>
             <button className={"button-85"} onClick={(evt) => {
-                 if(!inSession) router.push("/login")
+                 if(inSession) router.push("/admin")
+                 else router.push("/login")
             }} style={inSession ? userSession.privileges >= 50 ? {"color": "red", "fontWeight": "bold"}:{"color": "blue"}:{}}>{
                 inSession
                 ? userSession.username
