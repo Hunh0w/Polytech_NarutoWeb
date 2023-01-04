@@ -37,10 +37,6 @@ export default function Character() {
     const router = useRouter();
     const { query: { id } } = router;
 
-    if(!id){
-        return <></>
-    }
-
     const [ infos, setInfos ] = useState<Character>({
         id: -1,
         realname: '',
