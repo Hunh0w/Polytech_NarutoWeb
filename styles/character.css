@@ -21,6 +21,18 @@
     justify-self: center;
 }
 
+#character .character_appearances .character_appearance {
+    margin-top: 100px;
+    margin-bottom: 150px;
+}
+
+#character .character_appearances .character_appearance .title {
+    text-decoration: underline;
+}
+#character .character_appearances .character_appearance .character_shorts {
+    margin-top: 35px;
+}
+
 #character #properties {
     display: flex;
     flex-direction: row;

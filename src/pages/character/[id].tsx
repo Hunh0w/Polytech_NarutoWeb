@@ -138,7 +138,7 @@ export default function Character() {
     return <Container fluid>
         <Container id={"character"} style={{"backgroundColor": "black", "textAlign": "center"}}>
             <h1><u>{infos.realname}</u></h1>
-            <p>
+            <p style={{"marginBottom": "50px"}}>
                 <i>
                 {infos.description}
                 </i>
@@ -200,14 +200,14 @@ export default function Character() {
                     return (
 
                         <div className={"character_appearance"} key={index}>
-                            <h1 className={"title"}>Apparence: {value.name}</h1>
+                            <h1 className={"title"}>Apparence {index+1}: {value.name}</h1>
                             <h2>Rang: <i><u>{value.rank.name}</u></i></h2>
                             {value.images.map((image: Frame, index) => {
                                 return (<div key={index}>
                                     <img src={image.link} width={"50%"} />
                                 </div>)
                             })}
-                            <Container className={"character_shortcharacter"}>
+                            <Container className={"character_shorts character_shortcharacter"}>
                                 {value.short_character.length > 0 &&
                                     <h1><u>Shorts</u></h1>
                                 }
@@ -222,7 +222,7 @@ export default function Character() {
                                     })}
                                 </Container>
                             </Container>
-                            <Container className={"character_shortfights"}>
+                            <Container className={"character_shorts character_shortfights"}>
                                 {value.short_fights.length > 0 &&
                                     <h1><u>Fights</u></h1>
                                 }
