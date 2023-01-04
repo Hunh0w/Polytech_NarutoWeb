@@ -1,4 +1,8 @@
 #character {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     width: 70%;
     margin-top: 100px;
     margin-bottom: 100px;
@@ -15,6 +19,55 @@
     align-self: center;
     justify-content: center;
     justify-self: center;
+}
+
+#character #properties {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: start;
+}
+
+#character #properties > * {
+    margin-inline: 10px;
+    padding-inline: 15px;
+    padding-bottom: 15px;
+    border: 2px solid #830000;
+}
+
+iframe {
+    width: 500px;
+    height: 500px;
+}
+
+#character #abilities {
+    padding-inline: 15px;
+    padding-bottom: 15px;
+    border: 2px solid #830000;
+}
+
+
+
+@media screen and (max-width: 1000px) {
+    #character #properties {
+        flex-direction: column;
+        align-items: center;
+    }
+    #character #properties > * {
+        margin-block: 15px;
+    }
+
+    iframe {
+        width: 300px;
+        height: 300px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    iframe {
+        width: 200px;
+        height: 200px;
+    }
 }
 
 @media screen and (min-width: 1500px) {

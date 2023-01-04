@@ -28,7 +28,7 @@ export default function Header(props: {}) {
 
     return (<Container fluid id={"header"} style={{"display": "flex", "justifyContent": "space-between"}}>
         <div>
-            <h1 className={"title"}>Naruto</h1>
+            <h1 className={"title"}>Naruto Web</h1>
         </div>
         <div className={"navcontainer"}>
             <nav>
@@ -46,6 +46,10 @@ export default function Header(props: {}) {
                 ? userSession.username
                 : "Connexion"
             }</button>
+            <button className={"button-85"} onClick={(evt) => {
+                setUserSession({username: "", privileges: 0});
+                router.push("/disconnect")
+            }} style={{"marginLeft": "30px"}}>{"Déconnexion"}</button>
         </div>
     </Container>)
 }

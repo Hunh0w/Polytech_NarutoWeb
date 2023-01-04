@@ -44,6 +44,7 @@ function UserContextWrapper(Props: any){
     );
 
     useEffect(() => {
+        console.log("aaa");
         const token = Cookies.get("token");
         if(token === undefined) return;
         const json_str = Buffer.from(token, 'base64').toString('utf8');

@@ -11,7 +11,7 @@ export default function AdminPage() {
 
     const token = Cookies.get("token");
 
-    useEffect(() => {
+    const loadCharacters = () => {
         fetch(url+"/characters", {
             method: 'GET',
             headers: {
@@ -22,6 +22,10 @@ export default function AdminPage() {
             .then((jsonObj) => {
                 setCharacters(jsonObj.characters);
             })
+    }
+
+    useEffect(() => {
+        loadCharacters();
     }, []);
 
     const addProperty = (evt: any) => {
@@ -45,10 +49,12 @@ export default function AdminPage() {
 
     const createCharacter = async (character: any) => {
         let orgIds = [];
-        for(let i = 0; i < character.organizations; i++)
+        for(let i = 0; i < character.organizations.length; i++)
             orgIds.push(await createOrganization(character.organizations[i]));
+
+
         let appearances = [];
-        for(let i = 0; i < character.appearances; i++){
+        for(let i = 0; i < character.appearances.length; i++){
             const appearance = character.appearances[i];
 
             const images = [];
@@ -66,6 +72,8 @@ export default function AdminPage() {
                 short_fights.push(await createShort(appearance.short_fights[y]));
             appearance.short_fights = short_fights;
 
+            appearance.rank = await createRank(appearance.rank);
+
             appearances.push(appearance);
         }
 
@@ -77,7 +85,40 @@ export default function AdminPage() {
             appearances: appearances
         }
 
-        console.log(payload);
+        const resp = await fetch(url+"/characters", {
+            method: "post",
+            headers: {
+                "Authorization": token,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        });
+        if(resp.status === 200){
+            loadCharacters();
+        }
+    }
+
+    const createRank = async (rank: string) => {
+        let resp: any = await fetch(url+"/ranks", {
+            method: 'get'
+        }).then((resp) => resp.json());
+        const ranks = resp.ranks;
+        for(let i = 0; i < ranks.length; i++){
+            const rank_obj = ranks[i];
+            if(rank_obj.name.toLowerCase() === rank.toLowerCase())
+                return rank_obj["_id"];
+        }
+
+        resp = await fetch(url+"/ranks", {
+            method: "POST",
+            headers:{
+                "Authorization": token,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({name: rank, powerlevel: 50})
+        }).then((resp) => resp.json());
+
+        return resp.id;
     }
 
     const createShort = async (short: any) => {
@@ -87,13 +128,14 @@ export default function AdminPage() {
         const shorts = resp.shorts;
         for(let i = 0; i < shorts.length; i++){
             if(short.link.toLowerCase() === shorts[i].link.toLowerCase())
-                return shorts[i].id;
+                return shorts[i]["_id"];
         }
 
         resp = await fetch(url+"/shorts", {
             method: "POST",
             headers:{
-                "Authorization": token
+                "Authorization": token,
+                "Content-Type": "application/json"
             },
             body: JSON.stringify(short)
         }).then((resp) => resp.json());
@@ -108,13 +150,14 @@ export default function AdminPage() {
         const images = resp.images;
         for(let i = 0; i < images.length; i++){
             if(image.link.toLowerCase() === images[i].link.toLowerCase())
-                return images[i].id;
+                return images[i]["_id"];
         }
 
         resp = await fetch(url+"/images", {
             method: "POST",
             headers:{
-                "Authorization": token
+                "Authorization": token,
+                "Content-Type": "application/json"
             },
             body: JSON.stringify(image)
         }).then((resp) => resp.json());
@@ -128,14 +171,18 @@ export default function AdminPage() {
         }).then((resp) => resp.json());
         const organizations = resp.organizations;
         for(let i = 0; i < organizations.length; i++){
-            if(org.name.toLowerCase() === organizations[i].name.toLowerCase())
-                return organizations[i].id;
+            const organization = organizations[i];
+            if(org.name.toLowerCase() === organization.name.toLowerCase() && org.type.toLowerCase() === organization.type.toLowerCase()){
+                return organization["_id"];
+            }
+
         }
 
         resp = await fetch(url+"/organizations", {
             method: "POST",
             headers:{
-                "Authorization": token
+                "Authorization": token,
+                "Content-Type": "application/json"
             },
             body: JSON.stringify(org)
         }).then((resp) => resp.json());
@@ -311,7 +358,6 @@ export default function AdminPage() {
                         abilities: abilities,
                         appearances: appearances
                     }
-
                     await createCharacter(newCharacter);
                 }}>
                     CREATE
@@ -324,11 +370,30 @@ export default function AdminPage() {
                     <th>Actions</th>
                 </tr>
                 {characters.map((value: any, index) => {
-                    return (<tr>
+                    return (<tr key={index}>
                         <td>{value.id}</td>
                         <td>{value.realname}</td>
                         <td className={"actions"}>
-                            <button>DELETE</button>
+                            <button {...{"characterid": value.id}} onClick={async (evt) => {
+                                const target = evt.currentTarget;
+                                if(target.parentElement == null) return;
+                                if(target.parentElement.parentElement == null) return;
+                                const parent = target.parentElement.parentElement;
+                                let attribute_id = target.getAttribute("characterid");
+                                if(attribute_id == null) return;
+                                const id = parseInt(attribute_id);
+                                const resp = await fetch(url+"/characters", {
+                                    method: "delete",
+                                    headers: {
+                                        "Authorization": token,
+                                        "Content-Type": "application/json"
+                                    },
+                                    body: JSON.stringify({id: id})
+                                });
+                                if(resp.status === 200){
+                                    parent.remove();
+                                }
+                            }}>DELETE</button>
                         </td>
                     </tr>)
                 })}

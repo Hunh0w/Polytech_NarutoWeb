@@ -32,6 +32,21 @@
     justify-self: center;
 }
 
+#sort_box > .container {
+    display: flex;
+    justify-content: center;
+    margin-block: 30px;
+    padding-block: 10px;
+    width: 30%;
+    border: 2px dashed #7c0000;
+    background-color: black;
+}
+
+#sort_box label {
+    color: white;
+    margin-right: 10px;
+}
+
 @media screen and (min-width: 700px) {
     #characters {
         grid-template-columns: repeat(2, 1fr);

@@ -38,7 +38,6 @@ export async function middleware(request: NextRequest) {
     }
 
     if(isNavigationContainsPath(request.nextUrl.pathname)){
-        console.log("okey")
         const token = request.cookies.get("token");
         if(token){
             const response = await fetch(url+"/login/check", {
@@ -47,10 +46,8 @@ export async function middleware(request: NextRequest) {
                     "Authorization": token.value
                 }
             });
-            console.log(response.status);
             if(response.status != 200 || !isAdmin(token.value)){
                 const response = NextResponse.redirect(new URL("/login", request.url));
-                response.cookies.delete("token");
                 return response;
             }
         }else {
