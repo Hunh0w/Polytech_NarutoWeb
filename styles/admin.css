@@ -48,9 +48,14 @@
     margin-top: 20px;
 }
 
+#admin #newcharacter .appearance:last-child {
+    margin-bottom: 0px;
+}
+
 #admin #newcharacter .appearance {
     display: flex;
     flex-direction: column;
+    margin-bottom: 50px;
 }
 
 #admin #newcharacter #organizations {

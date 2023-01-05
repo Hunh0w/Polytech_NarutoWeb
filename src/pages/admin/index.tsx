@@ -34,7 +34,19 @@ export default function AdminPage() {
         const element = evt.currentTarget.parentElement.nextSibling.firstChild;
         if(element == null) return;
         if(element.parentElement == null) return;
-        element.parentElement.append(element.cloneNode(true));
+        const cloned = element.cloneNode(true);
+        element.parentElement.append(cloned);
+
+        if(cloned.className !== "appearance") return;
+        const buttons = cloned.querySelectorAll("button");
+        for(let i = 0; i < buttons.length; i++){
+            const button = buttons[i];
+            if(button.innerHTML === "+"){
+                button.addEventListener("click", addProperty);
+            }else if(button.innerHTML === "-"){
+                button.addEventListener("click", delProperty);
+            }
+        }
     };
 
     const delProperty = (evt: any) => {
